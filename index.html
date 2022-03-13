@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<title>Botta – Informatik ist [auch] Frauen*sache</title>
+
+	<!-- this is for mobile screens -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="img/botta_logo_bunt.png">
+
+	<!-- this is for our css files - we have to link our html file to the css files -->
+	<link rel="stylesheet" media="all" href="../component/styles/setup.css">
+	<link rel="stylesheet" media="all" href="../component/styles/says.css">
+	<link rel="stylesheet" media="all" href="../component/styles/reply.css">
+	<link rel="stylesheet" media="all" href="../component/styles/typing.css">
+  <link rel="stylesheet" media="all" href="../component/styles/input.css">
+  <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,600,700&display=swap" rel="stylesheet">
+
+  <!-- css stylesheet for the background of the web page (no need to worry about this) -->
+	<style>
+	body {
+		background: #E6E6E6;
+	}
+	.bubble-container {
+		height: 100vh;
+	}
+	.bubble-container .input-wrap textarea {
+    margin: 0;
+	}
+	</style>
+</head>
+<body>
+
+<!-- header for the chatbot  -->
+<div id="chat">
+  <div class="header">
+    <img src="img/botta_logo_bunt.png" width="80;">
+    <div>
+      <h1>Botta Chatbot</h1>
+      <p>Für mehr Frauen* in der Informatik! 🙋‍♀️ + 💻 = 🚀</p>
+    </div>
+  </div>
+</div>
+
+<!-- This is to power the chatbot, you do not need to worry about this area -->
+<script src="../component/js/Bubbles.js"></script>
+<script>
+var chatWindow = new Bubbles(document.getElementById("chat"), "chatWindow", {
+  inputCallbackFn: function(o) {
+
+    // this is for the bot - don't worry
+    var match = function(key) {
+      setTimeout(function() {
+        chatWindow.talk(convo, key) // restart current convo from point found in the answer
+      }, 600)
+    }
+
+    // sanitize text for search function - for the bot
+    var strip = function(text) {
+      return text.toLowerCase().replace(/[\s.,\/#!$%\^&\*;:{}=\-_'"`~()]/g, "")
+    }
+
+    // search function -  for the bot
+    var found = false
+    o.convo[o.standingAnswer].reply.forEach(function(e, i) {
+      strip(e.human_response).includes(strip(o.input)) && o.input.length > 0
+        ? (found = e.bot_answer)
+        : found ? null : (found = false)
+    })
+    found ? match(found) : miss()
+  }
+}) 
+
+
+var convo = {
+
+  // Ebene 1
+  intro: {
+    bot_says: ["Hi, ich bin Botta 👋 Ich bin ein Chatbot, der Frauen* hilft, sich in der spannenden Welt der Informatik zurechtzufinden und über Vorurteile aufklärt.",
+    "Wie kann ich dir helfen?"
+    ],
+    human_reply: [
+      {
+        human_response: "Warum findest du, dass wir mehr Frauen* in der Informatik brauchen?",
+        bot_answer: "a1"
+      },
+      {
+        human_response: "Ich interessiere mich für einen Einstieg in die IT-Branche.",
+        bot_answer: "b1"
+
+      },
+      {
+        human_response: "Erzähle mir etwas zu Vorurteilen über Frauen* in der Informatik.",
+        bot_answer: "c1"
+
+      },
+      {
+        human_response: "Kannst du mir sagen, was die IT-Branche als Arbeitsplatz zu bieten hat?",
+        bot_answer: "d1"
+
+      },
+    ]
+  },
+  
+  //Erster Zweig
+
+  "a1": {
+    bot_says: ["Dafür gibt es gute Gründe!",
+              "Worüber möchtest du mehr wissen?"],
+    human_reply: [
+    {
+        human_response: "Teamarbeit",
+        bot_answer: "a2"
+      },
+      {
+        human_response: "Diversität",
+        bot_answer: "a3"
+
+      },
+      {
+        human_response: "Fachkräftemangel",
+        bot_answer: "a4"
+
+      },
+    ]
+  },
+
+  "a2": {
+    bot_says: ["Forscher_innen haben herausgefunden, dass Frauen die Zusammenarbeit im Team verbessern <a href=bibliografie.html target=_blank>[5]</a>...",
+              "...und dass Geschlechterdiversität die Produktivität in Software-Teams steigert <a href=bibliografie.html target=_blank>[13]</a> 📈.", 
+              "Ein höherer Frauen*anteil sieht also nicht nur auf dem Papier gut aus, sondern kann für Unternehmen eine direkte Auswirkung auf den Output haben.",
+              "Willst du noch mehr wissen?"],
+    human_reply: [
+    {
+        human_response: "Gern!",
+        bot_answer: "a5"
+      },
+      {
+        human_response: "Nein, vielen Dank!",
+        bot_answer: "restart"
+
+      },
+    ]
+  },
+
+  "a3": {
+    bot_says: ["Die Informatik ist ein Feld, in dem Technologien entwickelt werden, die zukunftweisend für die nächsten Jahrzehnte sind.",
+          "Daher ist es wichtig, dass Teams so divers wie möglich sind, um Technologien zu schaffen, die nicht nur auf eine Gruppe von Menschen ausgerichtet sind, sondern verschiedene Hintergründe berücksichtigen und sensibel gegenüber möglichen Diskriminierungen sind.",
+          "Es geht also nicht nur um ein besseres Gleichgewicht zwischen weiblichen* und männlichen* Teammitgliedern, sondern auch darum, insgesamt diversere Teams zu schaffen.",
+          "Möchtest du noch mehr zu diesem Thema wissen?"],
+    human_reply: [
+    {
+        human_response: "Immer her damit!",
+        bot_answer: "a5"
+      },
+      {
+        human_response: "Nein, danke für den Input!",
+        bot_answer: "restart"
+
+      },
+    ]
+  },
+
+  "a4": {
+    bot_says: ["2021 fehlten 96.000 IT-Fachkräfte in Deutschland, ein Anstieg von satten 12% zum Vorjahr <a href=bibliografie.html target=_blank>[3]</a> 😱",
+          "Eine weitere Verschärfung dieses Mangels kann angesichts der fortschreitenden Digitalisierung erwartet werden.",
+          "Ein Teil des Problems könnte durch eine Steigerung des Frauen*anteils in der IT-Branche behoben werden.",
+          "Nachschlag gefällig?"],
+    human_reply: [
+    {
+        human_response: "Immer gern!",
+        bot_answer: "a5"
+      },
+      {
+        human_response: "Nein, das recht erstmal.",
+        bot_answer: "restart"
+
+      },
+    ]
+  },
+
+  "a5": {
+    bot_says: ["Worüber möchtest du noch mehr erfahren?"],
+    human_reply: [
+    {
+        human_response: "Teamarbeit",
+        bot_answer: "a2"
+      },
+      {
+        human_response: "Diversität",
+        bot_answer: "a3"
+
+      },
+      {
+        human_response: "Fachkräftemangel",
+        bot_answer: "a4"
+
+      },
+    ]
+  },
+
+// Zweiter Zweig  
+
+  "b1": {
+    bot_says: ["Super! Da bist du bei mir an der richtigen Adresse. Ich kann dir einiges erzählen 😌",
+        "Es gibt mehrere Möglichkeiten, in die IT-Branche einzusteigen. Je nachdem, ob du bereits eine Ausbildung oder Berufserfahrung mitbringst und wie viel Zeit du investieren möchtest.",
+        "Welches Thema interessiert dich denn?"],
+    human_reply: [
+    {
+        human_response: "E-Learning 🖥",
+        bot_answer: "b2"
+      },
+      {
+        human_response: "Quereinstieg 💼",
+        bot_answer: "b3"
+
+      },
+      {
+        human_response: "Studium und Ausbildung 📚",
+        bot_answer: "b4"
+
+      },
+    ]
+  },
+
+  "b2": {
+    bot_says: ["E-Learning ist nicht nur für viele Informatiker_innen eine der besten Möglichkeiten, auf dem Laufenden zu bleiben, sondern auch ein beliebter Einstieg für Informatik-Neulinge.",
+        "Mithilfe von E-Learning kannst du in das breite Themenfeld der Informatik reinschnuppern oder erste kleine Programmieraufgaben lösen.",
+        "Aber auch für Fortgeschrittene gibt es unzählige interessante Themen."],
+    human_reply: [
+    {
+        human_response: "Welche E-Learning-Plattformen gibt es denn?",
+        bot_answer: "b2a"
+      },
+    ]
+  },
+
+  "b2a": {
+    bot_says: ["In <a href=https://www.get-in-it.de/magazin/bewerbung/it-skills/e-learning-fuer-informatiker target=_blank>diesem Artikel</a> erhältst du einen Überblick über verschiedene E-Learning-Plattformen. Vielleicht ist ja etwas für dich dabei?",
+        "Übrigens: Zukünftige Arbeitgeber_innen kannst du mit einem Zertifikat auf deinem Lebenslauf beeindrucken, das du nach Abschluss vieler E-Learning-Module erhältst.",
+        "Möchtest du noch etwas über die anderen Einstiegsmöglichkeiten erfahren?"],
+    human_reply: [
+    {
+        human_response: "Was gibt`s denn noch so?",
+        bot_answer: "b10"
+      },
+      {
+        human_response: "Nein, danke! Das reicht erstmal.",
+        bot_answer: "restart"
+
+      },
+    ]
+  },
+
+  "b3": {
+    bot_says: ["Dieser Weg ist die perfekte Wahl, wenn du bereits eine Ausbildung oder ein Studium mitbringst.",
+        "Über welche der Möglichkeiten für einen Quereinstieg möchtest du mehr wissen?"],
+    human_reply: [
+    {
+        human_response: "Bootcamp 🏋️‍♀️",
+        bot_answer: "b5"
+      },
+      {
+        human_response: "Trainee-Programm 👩‍💻",
+        bot_answer: "b6"
+
+      },
+    ]
+  },
+
+  "b4": {
+    bot_says: ["Studium oder Ausbildung erfordern natürlich ein langfristiges zeitliches und finanzielles Commitment. Aber die Arbeit lohnt sich!",
+        "Kommt für dich derzeit eher eine Ausbildung oder ein Studium in Frage?"],
+    human_reply: [
+    {
+        human_response: "Eher ein Studium",
+        bot_answer: "b7"
+      },
+      {
+        human_response: "Eher eine Ausbildung",
+        bot_answer: "b8"
+
+      },
+    ]
+  },
+
+  "b5": {
+    bot_says: ["Bootcamps sind Vollzeit-Schulungen, die sich über mehrere Wochen oder Monate hinstrecken.",
+        "In dieser intensiven Zeit wechseln sich Theorie und Praxis ständig ab, sodass die erlernten Konzepte direkt in Projekten umgesetzt werden.",
+        "Dieses Vorgehen soll dafür sorgen, dass Teilnehmer_innen möglichst gut auf einen Direkteinstieg in den neuen Job vorbereitet werden.",
+        "Bootcamps sind meist nicht besonders günstig, teilweise gibt es allerdings auch Stipendien.",
+        "In <a href=https://t3n.de/news/programmieren-lernen-coding-bootcamp-1291127/ target=_blank>diesem Artikel</a> findest du einen Überblick über verschiedene Coding-Bootcamps.",
+        "Weißt du schon, was Trainee-Programme sind?"],
+    human_reply: [
+    {
+        human_response: "Ja, davon habe ich schon gehört. ",
+        bot_answer: "b9"
+      },
+      {
+        human_response: "Nein, was kannst du mir dazu erzählen?",
+        bot_answer: "b6"
+
+      },
+    ]
+  },
+
+  "b6": {
+    bot_says: ["Für ein Trainee-Programm bewirbst du dich meist direkt bei einem Unternehmen, das dich für eine bestimmte Stelle ausbildet.",
+        "Von Vorteil ist hier die Jobsicherheit, da du während des gesamten Trainee-Programms beim Unternehmen angestellt bist und das Ziel ist, dich am Ende auch zu übernehmen.",
+        "Während des Trainee-Programms bietet das Unternehmen meist verschiedene Schulungen an, an denen du teilnimmst.",
+        "Die Voraussetzungen für Trainee-Programme sind sehr unterschiedlich: Oft wird ein einschlägiger Abschluss verlangt, manchmal sind aber auch Quereinsteiger_innen erwünscht.",
+        "Weißt du schon, was Bootcamps sind?"],
+    human_reply: [
+    {
+        human_response: "Nein, was kannst du mir dazu erzählen?",
+        bot_answer: "b5"
+      },
+      {
+        human_response: "Ja, davon habe ich schon gehört.",
+        bot_answer: "b9"
+
+      },
+    ]
+  },
+
+  "b7": {
+    bot_says: ["Fun Fact: Anders als du vielleicht erwarten würdest, musst du NICHT bereits programmieren können, um ein Informatikstudium zu beginnen. Das Handwerkszeug lernst du in den ersten Semestern.",
+        "Die meisten der rund 1.200 Informatik-Bachelorstudiengänge in Deutschland haben eine Regelstudienzeit von 3 Jahren.",
+        "Nach dieser Zeit kannst du dich auf Einstiegsgehälter zwischen 38.400 € und 44.700€ freuen <a href=bibliografie.html target=_blank>[9]</a> 🎉."],
+    human_reply: [
+    {
+        human_response: "Wo finde ich mehr Infos zu Studiengängen?",
+        bot_answer: "b7a"
+      },
+    ]
+  },
+
+  "b7a": {
+    bot_says: ["Auf <a href=https://www.hochschulkompass.de/studium/studiengangsuche/erweiterte-studiengangsuche.html?tx_szhrksearch_pi1%5Bsearch%5D=1&tx_szhrksearch_pi1%5Bstudtyp%5D=3&tx_szhrksearch_pi1%5BQUICK%5D=1&tx_szhrksearch_pi1%5Bfach%5D=informatik&tx_szhrksearch_pi1%5Babschluss%5D%5B%5D=24 target=_blank>hochschulkompass.de</a> findest du eine Auflistung aller Informatikstudiengänge in Deutschland",
+        "Es gibt auch Studiengänge, die zum Großteil Online stattfinden und eine flexible Zeiteinteilung neben dem Job oder familiären Verpflichtungen ermöglichen – beispielsweise die Studiengänge der <a href=https://www.vfh.de target=_blank>Virtuellen Fachhochschule</a>.",
+        "Kommt für dich auch eine Ausbildung in Frage?"],
+    human_reply: [
+    {
+        human_response: "Nein",
+        bot_answer: "b9"
+      },
+      {
+        human_response: "Gut möglich.",
+        bot_answer: "b8"
+
+      },
+      {
+        human_response: "Darüber haben wir schon geredet 😉",
+        bot_answer: "b9"
+
+      },
+    ]
+  },
+
+  "b8": {
+    bot_says: ["Die Ausbildung zum_r Fachinformatiker_in ist eine weitere Einstiegsmöglichkeit. ",
+        "Bei dieser Ausbildung kannst du verschiedene Schwerpunkte wählen: Anwendungsentwicklung, Systemintegration, digitale Vernetzung oder Daten- und Prozessanalyse.",
+        "Ein Vorteil der Ausbildung ist, dass du nebenbei schon Geld verdienst: Im ersten Ausbildungsjahr 975€ bis 1050€, im letzten dann 1100 bis 1200€ <a href=bibliografie.html target=_blank>[1]</a>.",
+        "Unter Umständen kann die übliche Ausbildungszeit von 3 Jahren auch verkürzt werden, damit du eher voll im Beruf einsteigen kannst.",
+        "Mehr Informationen zu dieser Ausbildung findest du zum Beispiel <a href=https://www.aubi-plus.de/berufe/fachinformatiker-fachinformatikerin-1551/ target=_blank>hier</a>.",
+        "Kommt für dich auch ein Studium in Frage?"],
+        human_reply: [
+    {
+        human_response: "Nein",
+        bot_answer: "b9"
+      },
+      {
+        human_response: "Gut möglich.",
+        bot_answer: "b7"
+
+      },
+      {
+        human_response: "Darüber haben wir schon geredet 😉",
+        bot_answer: "b9"
+
+      },
+    ]
+  },
+
+  "b9": {
+    bot_says: ["Möchtest du noch etwas über die anderen Einstiegsmöglichkeiten erfahren?"],
+    human_reply: [
+    {
+        human_response: "Was gibt`s denn noch so?",
+        bot_answer: "b10"
+      },
+      {
+        human_response: "Nein, danke! Das reicht erstmal.",
+        bot_answer: "restart"
+
+      },
+    ]
+  },
+
+  "b10": {
+    bot_says: ["Das hier zum Beispiel:"],
+    human_reply: [
+    {
+        human_response: "E-Learning 🖥",
+        bot_answer: "b2"
+      },
+      {
+        human_response: "Quereinstieg 💼",
+        bot_answer: "b3"
+
+      },
+      {
+        human_response: "Studium und Ausbildung 📚",
+        bot_answer: "b4"
+
+      },
+    ]
+  },
+
+// Dritter Zweig 
+"c1": {
+    bot_says: ["Ein sehr wichtiges Thema!",
+        "Wie du sicher schon gehört hast, gibt es in Deutschland weniger Frauen* als Männer in IT-Berufen. Um genau zu sein, liegt der Frauenanteil konstant bei rund 17% <a href=bibliografie.html target=_blank>[6]</a>. In Informatikstudiengängen sind es ca. 25% <a href=bibliografie.html target=_blank>[2]</a>.",
+        "Oft wird behauptet, dass Frauen sich “von Natur aus” eher weniger für technische Inhalte begeistern würden."],
+    human_reply: [
+    {
+        human_response: "So ein Quatsch!",
+        bot_answer: "c2"
+      },
+      {
+        human_response: "Ist da vielleicht was dran?",
+        bot_answer: "c3"
+
+      },
+    ]
+  },
+
+  "c2": {
+    bot_says: ["Ist es. Die Sozialisierung trägt natürlich einen Teil dazu bei, dass Mädchen oft nicht so früh mit technischen Themen in Berührung kommen wie Jungen. Das heißt aber nicht, dass sie sich nicht für Technik interessieren.",
+        "In der ehemaligen DDR lag der Frauenanteil in Informatikstudiengängen teilweise sogar bei 50-60% <a href=bibliografie.html target=_blank>[11]</a>.",
+        "Vielleicht hast du auch schon mal gehört, dass die ersten Programmierinnen in der Zeit während des und kurz nach dem Zweiten Weltkrieg zumeist Frauen waren. Die Wissenschaftlerin Ada Lovelace leistete bereits im 19. Jahrhundert wichtige Beiträge zur Informatik.",
+        "Jetzt wo wir das geklärt haben, kann ich dir gern etwas zu den relevanteren Gründen für den geringen Anteil an Informatikerinnen erzählen."],
+    human_reply: [
+    {
+        human_response: "Ja, gern.",
+        bot_answer: "c4"
+      },
+    ]
+  },
+
+  "c3": {
+    bot_says: ["Nicht so, wie man vielleicht denken würde. Die Sozialisierung trägt natürlich einen Teil dazu bei, dass Mädchen oft nicht so früh mit technischen Themen in Berührung kommen wie Jungen. Das heißt aber nicht, dass sie sich nicht für Technik interessieren.",
+        "In der ehemaligen DDR lag der Frauenanteil in Informatikstudiengängen teilweise sogar bei 50-60% <a href=bibliografie.html target=_blank>[11]</a>.",
+        "Vielleicht hast du auch schon mal gehört, dass die ersten Programmierinnen in der Zeit während des Zweiten Weltkrieges zumeist Frauen waren. Die Wissenschaftlerin Ada Lovelace leistete bereits im 19. Jahrhundert wichtige Beiträge zur Informatik.",
+        "Jetzt wo wir das geklärt haben, kann ich dir gern etwas zu den relevanteren Gründen für den geringen Anteil an Informatikerinnen erzählen."],
+    human_reply: [
+    {
+        human_response: "Ja, gern.",
+        bot_answer: "c4"
+      },
+    ]
+  },
+
+  "c4": {
+    bot_says: ["Okay! Worüber würdest du gern mehr wissen?"],
+    human_reply: [
+      {
+        human_response: "Das Märchen vom Nerd",
+        bot_answer: "c5"
+      },
+      {
+        human_response: "Fehlende Vorbilder",
+        bot_answer: "c6"
+      },
+      {
+        human_response: "Eine Frage des Selbstvertrauens",
+        bot_answer: "c7"
+      },
+      {
+        human_response: "Missverständnisse über das Berufsbild",
+        bot_answer: "c8"
+      },
+    ]
+  },
+
+  "c5": {
+    bot_says: ["Es war einmal ein männlicher Nerd, der Computer liebte. Und plötzlich wurde er zur Blaupause für alle Informatiker_innen gemacht.",
+      "Nein, ernsthaft: Die Informatik hat ein Imageproblem. Von Informatikerinnen wird meist erwartet, dass sie mindestens nerdig, wenn schon nicht männlich sind.",
+      "In Medien und Stellenanzeigen werden sie regelmäßig als weibliche Geeks, Gamer-Girls oder ähnliches bezeichnet. Aber nicht jede kann oder möchte sich damit identifizieren."],
+    human_reply: [
+      {
+        human_response: "Ist es das denn so schlimm?",
+        bot_answer: "c5a"
+      },
+    ]
+  },
+
+  "c5a": {
+    bot_says: ["Dass viele Frauen* sich in diesem vermeintlichen Ideal nicht wiedererkennen, kann dazu führen, dass sie das Vertrauen in die eigenen Fähigkeiten verlieren und schließlich den Spaß an der Materie <a href=bibliografie.html target=_blank>[12]</a>.",
+      "Manche passen sich auch an: So gibt es Frauen*, die sich weniger weiblich kleiden, um in der Branche ernst genommen zu werden <a href=bibliografie.html target=_blank>[4]</a>.",
+      "Sich für seinen Beruf verstellen zu müssen, ist ziemlich traurig. Besonders weil Vielfalt eine große Stärke ist. Dazu erzähle ich dir an anderer Stelle gern mehr.",
+      "Möchtest du noch weitere Gründe für den Mangel an Informatikerinnen erfahren?"],
+    human_reply: [
+      {
+        human_response: "Gib mir mehr!",
+        bot_answer: "c4"
+      },
+      {
+        human_response: "Nein, das reicht.",
+        bot_answer: "restart"
+      },
+    ]
+  },
+
+  "c6": {
+    bot_says: ["Wie viele Informatikerinnen kennst du? Eine, zwei, keine? Der geringe Frauenanteil in der Informatik führt auch dazu, dass Informatikerinnen weniger sichtbar sind. ",
+      "Übrigens nicht nur im Arbeitsalltag, sondern auch auf Tech-Konferenzen, in der Lehre oder als Interviewpartnerinnen."],
+    human_reply: [
+      {
+        human_response: "Naja, wenn sich nicht mehr Frauen* gefunden haben... 🤷‍♀️",
+        bot_answer: "c6a"
+      },
+    ]
+  },
+
+  "c6a": {
+    bot_says: ["Das ist leider ein Problem: Da diese Expert_innenrollen in Deutschland meist von Männern ausgeübt werden, verstärkt sich nach außen hin der Eindruck, dass Informatik eben eine rein männliche Wissenschaft sei.",
+      "Sichtbarkeit ist extrem wichtig, um sich mit einer Gruppe identifizieren zu können.",
+      "Durch einen Mangel hieran haben Frauen* die Informatik auch weniger als Berufsfeld auf dem Zettel. Ein Teufelskreis!",
+      "Möchtest du noch weitere Gründe für den Mangel an Informatikerinnen erfahren?"],
+    human_reply: [
+      {
+        human_response: "Gib mir mehr!",
+        bot_answer: "c4"
+      },
+      {
+        human_response: "Nein, das reicht.",
+        bot_answer: "restart"
+      },
+    ]
+  },
+
+  "c7": {
+    bot_says: ["Frauen* unterschätzen sich und ihre Fähigkeiten oft systematisch."],
+    human_reply: [
+      {
+        human_response: "Ein bisschen Bescheidenheit schadet ja nicht, oder?",
+        bot_answer: "c7a"
+      },
+    ]
+  },
+
+  "c7a": {
+    bot_says: ["Naja, irgendwie schon: In einer Studie mit Informatikstudent_innen der Universität Bamberg fanden die Wissenschaftlerinnen Förtsch und Schmid <a href=bibliografie.html target=_blank>[7]</a> heraus, dass Studentinnen die Wahrscheinlichkeit, ihr Studium erfolgreich abzuschließen, signifikant schlechter einschätzten, als ihre männlichen Kommilitonen...",
+      "... und das, obwohl sie bessere Abiturnoten und ähnliche Mathematiknoten vorzuweisen hatten.",
+      "Außerdem gaben ihre männlichen Kommilitonen weitaus häufiger an, eine natürliche Begabung für Informatik zu besitzen.",
+      "Diese verzerrte Selbstwahrnehmung sorgt nicht nur dafür, dass Frauen* eine Informatikkarriere weniger in Betracht ziehen, sondern kann auch ein Hindernis sein, später Führungsrollen zu übernehmen.",
+      "Möchtest du noch weitere Gründe für den Mangel an Informatikerinnen erfahren?"],
+    human_reply: [
+      {
+        human_response: "Gib mir mehr!",
+        bot_answer: "c4"
+      },
+      {
+        human_response: "Nein, das reicht.",
+        bot_answer: "restart"
+      },
+    ]
+  },
+
+  "c8": {
+    bot_says: ["In der Informatik geht es nicht nur um technische oder mathematische Fähigkeiten. Entgegen dem öffentlichen Eindruck ist beispielsweise Software-Entwicklung eine überaus soziale Aktivität, die viel Kommunikation und Teamgeist erfordert.",
+      "Das wird übrigens auch gern von Software-Entwickler_innen unter den Tisch fallen gelassen."],
+    human_reply: [
+      {
+        human_response: "Wie meinst du das?",
+        bot_answer: "c9"
+      }
+    ]
+  },
+
+  "c9": {
+    bot_says: ["Die Forscherin Bianca Prietl interviewte mehrere Software-Entwickler_innen und fand dabei heraus, dass diese sich bei der Beschreibung ihres Berufsbildes ausschließlich auf die technischen Aspekte konzentrierten <a href=bibliografie.html target=_blank>[10]</a>.",
+      "Obwohl sie im Interview vorher angaben, dass mehr als die Hälfte ihres Jobs aus Kommunikation bestünde und diese auch äußerst wichtig sei, um ein gutes Produkt abzuliefern, gingen sie bei der Beschreibung von Software-Engineering als Berufsbild ausschließlich auf das Programmieren ein und beschrieben es als ´pur analytisch´.",
+      "´Den´ Programmierer als solchen beschrieben sie als äußerst unkommunikativ – sich selbst sah interessanterweise jede_r als die Ausnahme von dieser Regel 🥸",
+      "Übrigens: Auch Programmieren ist eine Fähigkeit, die man lernen kann, aber auch immer wieder üben muss. Das hat aber weniger etwas mit biologischen Gegebenheiten zu tun, als mit Geduld, Kreativität, Lernbereitschaft und Kommunikationskompetenz 😊.",
+      "Möchtest du noch weitere Gründe für den Mangel an Informatikerinnen erfahren?"],
+    human_reply: [
+      {
+        human_response: "Gib mir mehr!",
+        bot_answer: "c4"
+      },
+      {
+        human_response: "Nein, das reicht.",
+        bot_answer: "restart"
+      },
+    ]
+  },  
+
+// Vierter Zweig
+  "d1": {
+    bot_says: ["So einiges!",
+    "Aufgrund des Fachkräftemangels gibt es in den nächsten Jahren zehntausende freie Stellen in der Branche, sodass du mit entsprechenden Fachkenntnissen keine Probleme haben solltest, Arbeit zu finden.",
+    "Das geht in vielen verschiedenen Formen: Du kannst dich selbständig machen, in einem mittelständischen Betrieb arbeiten oder in einem großen internationalen Unternehmen Erfahrungen sammeln."],
+    human_reply: [
+      {
+        human_response: "Unter uns: Wie sieht´s mit der Bezahlung aus?",
+        bot_answer: "d2"
+      },
+    ]
+  },
+
+  "d2": {
+    bot_says: ["Auch die Gehälter können sich sehen lassen 😉 Ungefähr 45.408€ brutto verdient eine Programmiererin mit 3 Jahren Unternehmenszugehörigkeit und einem Bachelorabschluss in Berlin pro Jahr <a href=bibliografie.html target=_blank>[8]</a>.",
+    "Für einen männlichen Kollegen liegt der Lohn bei den selben Voraussetzungen allerdings bei 50.556 € – auch am Gender-Pay-Gap lässt sich erkennen, dass noch einiges zu tun ist 💸💸💸."],
+    human_reply: [
+      {
+        human_response: "Aber mir kommt´s auch nicht nur auf das Geld an...",
+        bot_answer: "d3"
+      },
+    ]
+  },
+
+  "d3": {
+    bot_says: ["In der Informatik gibt es viele verschiedene Positionen in denen du wirklich was bewegen kannst – da wird es garantiert nie langweilig!",
+    "Technologie spielt zum Beispiel eine zentrale Rolle bei der Einsparung von Ressourcen und der Optimierung von Produktionsprozessen...",
+    "...Computermodelle helfen dabei komplexe Entwicklungen wie den Klimawandel zu simulieren und Entscheidungen zu treffen...",
+    "...und in der Medizininformatik kannst du einen Beitrag zur Erforschung von Krankheiten leisten. Und das sind nur einige von vielen Beispielen!",
+    "<img src=https://media3.giphy.com/media/eBIOSffRsc1tI2vp2e/giphy.gif />"],
+    human_reply: [
+      {
+        human_response: "Cool, danke!",
+        bot_answer: "restart"
+      },
+    ]
+  },  
+
+
+// Finale Frage
+  "restart": {
+    bot_says: ["Interessiert dich noch eines der folgenden Themen?"],
+    human_reply: [
+    {
+        human_response: "Warum die Informatik mehr Frauen* braucht",
+        bot_answer: "a1"
+      },
+      {
+        human_response: "Wege in die Informatik",
+        bot_answer: "b1"
+
+      },
+      {
+        human_response: "Vorurteile über Informatiker_innen",
+        bot_answer: "c1"
+
+      },
+      {
+        human_response: "Was bietet die IT-Branche als Arbeitsplatz",
+        bot_answer: "d1"
+
+      },
+      {
+        human_response: "Ich möchte nichts weiter wissen",
+        bot_answer: "end"
+
+      },
+    ]
+  },
+
+  "end": {
+    bot_says: ["Schön, dass du heute vorbeigeschaut hast!",
+        "Ich hoffe, ich konnte dir helfen und dich für die Informatik begeistern. Viele zukünftige Kolleg_innen freuen sich schon auf deine Unterstützung 🥳!",
+        "Hab einen schönen Tag! 💐"],
+  }, 
+  
+}
+chatWindow.talk(convo)
+</script>
+</body>
+
+
