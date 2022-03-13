@@ -8,7 +8,7 @@ The code for this chatbot was adapted from the course ["Design a feminist chatbo
 The original code can be found on [Glitch](https://glitch.com/edit/#!/feminist-chatbot-template).
 
 ## Usage
-You can try the chatbot out [here](https://li-tra.github.io/botta-chatbot/)
+You can try the chatbot [here](https://li-tra.github.io/botta-chatbot/).
 
 
 
